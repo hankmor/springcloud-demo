@@ -7,9 +7,8 @@
     <artifactId>springcloud-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <modules>
-        <module>eureka-server</module>
-        <module>service-demo</module>
-        <module>ribbon-consumer</module>
+        <module>01-hello</module>
+        <module>api-gateway</module>
     </modules>
     <packaging>pom</packaging>
 
