@@ -7,8 +7,9 @@
     <artifactId>springcloud-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <modules>
-        <module>01-hello</module>
-        <module>api-gateway</module>
+        <module>01-helloworld</module>
+        <module>02-eureka</module>
+        <module>05-config</module>
     </modules>
     <packaging>pom</packaging>
 
