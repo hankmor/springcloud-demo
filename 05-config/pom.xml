@@ -14,5 +14,6 @@
         <module>config-client</module>
         <module>config-server-native</module>
         <module>config-server-remote</module>
+        <module>config-server-native-encrypt</module>
     </modules>
 </project>
