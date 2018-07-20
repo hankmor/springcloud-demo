@@ -8,15 +8,12 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>02-eureka</artifactId>
+    <artifactId>06-config</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>01-eureka-server</module>
-        <module>01-service-demo</module>
-        <module>02-eureka-server-nodes</module>
-        <module>02-service-provider</module>
-        <module>01-feign-consumer</module>
-        <module>01-ribbon-consumer</module>
+        <module>config-client</module>
+        <module>config-server-native</module>
+        <module>config-server-remote</module>
+        <module>config-server-native-encrypt</module>
     </modules>
 </project>
