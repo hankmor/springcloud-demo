@@ -9,7 +9,11 @@
     <modules>
         <module>01-helloworld</module>
         <module>02-eureka</module>
-        <module>05-config</module>
+        <module>03-hystrix</module>
+        <module>04-ribbon</module>
+        <module>05-feign</module>
+        <module>06-config</module>
+        <module>07-zuul</module>
     </modules>
     <packaging>pom</packaging>
 

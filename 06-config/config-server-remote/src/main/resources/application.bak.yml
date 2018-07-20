@@ -1,0 +1,29 @@
+debug: true
+server:
+    port: 8888
+spring:
+    config:
+        name: config
+    application:
+        name: config-server
+    cloud:
+      config:
+        server:
+# ===================== 基于http请求git仓库 =====================
+          git:
+#            uri: https://github.com/sunfuchang/config-center.git
+#            username:
+#            password:
+# ===================== 基于ssh请求git仓库 =====================
+#            uri: git@github.com:sunfuchang/config-center.git
+# 使用本地自建git仓库
+            uri: git@192.168.0.17:/data/code/config-center.git
+            ignore-local-ssh-settings: true
+            private-key: |
+                          -----BEGIN RSA PRIVATE KEY-----
+                          MIIEpAIBAAKCAQEA4LrVzqgH3cK3R3yUATlAlGlke5UgJtn+2kJ9/mJ9YRF2lqzo
+                          wCSa2hxQ5b75ylF3Qe2ivsb+fabpeQ0FfF0IVAc4azIZWR0enyGxk0BHIaYYx2Rb
+                          aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                          emIMYRch5uJ6yTYiB217ypEuL1nKaeumV1AdGgELvosb5o7UsV+i1GmeMez3wI1P
+                          uMhaQUO9n8ZF9tVlTByh8F75fEa4xxK9lPpgA+qpwIpAjRpCxHF/dA==
+                          -----END RSA PRIVATE KEY-----
