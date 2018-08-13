@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <description>多节点eureka下服务提供者</description>
     <artifactId>service-provider</artifactId>
 
     <dependencies>
