@@ -10,4 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>03-hystrix</artifactId>
+    <modules>
+        <module>feign-hystrix-consumer</module>
+        <module>feign-hystrix-consumer-dashboard</module>
+    </modules>
 </project>

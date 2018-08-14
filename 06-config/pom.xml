@@ -15,5 +15,6 @@
         <module>config-server-native</module>
         <module>config-server-remote</module>
         <module>config-server-native-encrypt</module>
+        <module>config-server-git-demo</module>
     </modules>
 </project>
