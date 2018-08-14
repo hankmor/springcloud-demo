@@ -18,6 +18,5 @@
         <module>02-service-provider</module>
         <module>01-feign-consumer</module>
         <module>01-ribbon-consumer</module>
-        <module>01-feign-hystrix-consumer</module>
     </modules>
 </project>
