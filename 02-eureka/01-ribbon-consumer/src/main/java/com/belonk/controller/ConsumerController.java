@@ -33,7 +33,7 @@ public class ConsumerController {
     /**
      * 服务调用地址，根据服务名称
      */
-    public static final String SERVICE_URL = "http://hello-service/";
+    public static final String SERVICE_URL = "http://hello-service";
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,7 +57,7 @@ public class ConsumerController {
      */
 
     @GetMapping("/hello")
-    public String helloConsumer() {
+    public String helloConsumer(String name) {
         List<ServiceInstance> instances = discoveryClient.getInstances("hello-service");
         log.info("Service instances : ");
         for (ServiceInstance instance : instances) {
@@ -65,7 +65,7 @@ public class ConsumerController {
                     + ", port : " + instance.getPort() + ", secure : " + instance.isSecure());
         }
         // 请求服务的hello api
-        return restTemplate.getForEntity(SERVICE_URL + "hello", String.class).getBody();
+        return restTemplate.getForEntity(SERVICE_URL + "/sayHello?name={1}", String.class, name).getBody();
     }
 
     /*
