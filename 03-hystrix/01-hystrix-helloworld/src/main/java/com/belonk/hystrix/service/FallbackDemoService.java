@@ -1,17 +1,19 @@
-package com.belonk.web;
+package com.belonk.hystrix.service;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import org.springframework.stereotype.Service;
 
 /**
- * Created by sun on 2018/7/19.
+ * Created by sun on 2018/8/20.
  *
  * @author sunfuchang03@126.com
  * @version 1.0
  * @since 1.0
  */
-@RestController
-public class HelloController {
+@Service
+@DefaultProperties(defaultFallback = "fallback")
+public class FallbackDemoService {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
@@ -50,11 +52,29 @@ public class HelloController {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    @RequestMapping("/hello")
-    public String hello(String name) {
-        return "hello, " + name;
+    @HystrixCommand
+    public String test1() {
+        throw new RuntimeException("test1 exception");
     }
-    
+
+    @HystrixCommand
+    public String test2(String name) {
+        throw new RuntimeException("test2 exception");
+    }
+
+    @HystrixCommand
+    public String test3(Object param) {
+        throw new RuntimeException("test3 exception");
+    }
+
+    /*
+     * 默认回调方法，除了传递的异常信息外，不能有其他参数
+     */
+    private String fallback(Throwable e) {
+        System.out.println("exception info : " + e);
+        return "Server is busy, exception : " + e.getMessage();
+    }
+
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *

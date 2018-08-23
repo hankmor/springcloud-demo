@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @since 1.0
  */
 // fallback：指定服务熔断时候的回调类
-@FeignClient(name = "hello-service", fallback = SayHelloClientHystrix.class)
+@FeignClient(name = "hello-web", fallback = SayHelloClientHystrix.class)
 public interface SayHelloClient {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
