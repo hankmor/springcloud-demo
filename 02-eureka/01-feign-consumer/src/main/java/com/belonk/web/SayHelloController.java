@@ -1,5 +1,6 @@
 package com.belonk.web;
 
+import com.belonk.pojo.User;
 import com.belonk.service.ApiProductClient;
 import com.belonk.service.ProductClient;
 import com.belonk.service.SayHelloClient;
@@ -79,6 +80,14 @@ public class SayHelloController {
     @GetMapping("/api/product/{id}")
     public String getPruductInfoByApiGateway(@PathVariable("id") Long id) {
         return apiProductClient.getProductInfo(id);
+    }
+
+    @GetMapping("/user")
+    public String userHello() {
+        User user = new User();
+        user.setName("lily");
+        user.setGift("birthday card");
+        return sayHelloClient.sayHello(user);
     }
 
     /*
