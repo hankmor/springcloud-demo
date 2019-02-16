@@ -52,6 +52,8 @@ public class FallbackDemoService {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
+    // 失败时使用默认的回调方法处理
+
     @HystrixCommand
     public String test1() {
         throw new RuntimeException("test1 exception");
@@ -67,7 +69,7 @@ public class FallbackDemoService {
         throw new RuntimeException("test3 exception");
     }
 
-    /*
+    /**
      * 默认回调方法，除了传递的异常信息外，不能有其他参数
      */
     private String fallback(Throwable e) {

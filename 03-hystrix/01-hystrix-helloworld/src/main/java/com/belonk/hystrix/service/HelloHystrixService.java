@@ -89,7 +89,7 @@ public class HelloHystrixService {
         return "Hello1 request failed.";
     }
 
-    //~ 获取回到的异常信息
+    //~ 获取回调的异常信息
 
     @HystrixCommand(fallbackMethod = "helloFailed2")
     public String hello2(String name) {
@@ -103,7 +103,7 @@ public class HelloHystrixService {
         throw new RuntimeException("some exception3");
     }
 
-    @HystrixCommand
+    // @HystrixCommand
     public String helloFailed3(String name, Throwable e) {
         return "Hello2 request failed, exception : " + e.getMessage();
     }
