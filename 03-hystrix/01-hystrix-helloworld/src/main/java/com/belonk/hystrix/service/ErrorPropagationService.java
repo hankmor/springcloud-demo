@@ -63,10 +63,10 @@ public class ErrorPropagationService {
         throw new BusinessException("errorPropagation0 exception");
     }
 
-    // 抛出的是HystrixBadRequestException类型的异常，不会触发回调
+    // 抛出的是HystrixBadRequestException类型的异常，不会触发回调，而是直接抛出
     @HystrixCommand(fallbackMethod = "fallback")
     public String errorPropagation0_1() {
-        throw new BadRequestException("errorPropagation0-1 exception");
+        throw new BadRequestException("errorPropagation0_1 exception");
     }
 
     // ignoreExceptions: 被忽略的异常，即：抛出这些异常，并不触发回调方法，而是直接向外层抛出
@@ -99,7 +99,7 @@ public class ErrorPropagationService {
     // 单独回调方法
     String errorPropagationFallback(Throwable e) {
         System.out.println("cause : " + e.getCause());
-        return ("fallback method exception");
+        return "fallback method exception";
     }
 
     @HystrixCommand

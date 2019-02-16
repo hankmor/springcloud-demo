@@ -12,8 +12,7 @@
     <artifactId>03-hystrix</artifactId>
     <modules>
         <module>01-hystrix-helloworld</module>
-        <module>feign-hystrix-consumer</module>
-        <module>feign-hystrix-consumer-dashboard</module>
         <module>02-hystrix-ribbon</module>
+        <module>feign-hystrix-consumer</module>
     </modules>
 </project>
