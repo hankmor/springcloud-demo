@@ -11,8 +11,11 @@
     <packaging>pom</packaging>
     <artifactId>03-hystrix</artifactId>
     <modules>
-        <module>01-hystrix-helloworld</module>
+        <module>01-hystrix-demo</module>
         <module>02-hystrix-ribbon</module>
-        <module>feign-hystrix-consumer</module>
+        <module>03-feign-hystrix-consumer</module>
+        <module>04-hystrix-dashboard-turbine</module>
+        <module>04-hystrix-service-1</module>
+        <module>04-hystrix-service-2</module>
     </modules>
 </project>
