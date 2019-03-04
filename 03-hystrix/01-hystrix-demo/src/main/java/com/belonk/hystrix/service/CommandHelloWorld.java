@@ -128,7 +128,7 @@ public class CommandHelloWorld extends HystrixCommand<String> {
                 }
             });
 
-            // 非阻塞
+            // 非阻塞，忽略错误和完成信息
             belonkObservable.subscribe(new Action1<String>() {
                 @Override
                 public void call(String s) {
