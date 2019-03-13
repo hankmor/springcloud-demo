@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>springcloud-demo</artifactId>
+        <groupId>com.belonk</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>08-bus</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>08-bus</name>
+    <description>Demo project for Spring cloud bus</description>
+    <packaging>pom</packaging>
+    <modules>
+        <module>01-rabbitmq-demo</module>
+        <module>02-config-server-eureka</module>
+        <module>02-config-client-eureka</module>
+    </modules>
+
+</project>
