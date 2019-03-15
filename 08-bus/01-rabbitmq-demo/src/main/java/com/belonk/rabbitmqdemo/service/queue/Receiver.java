@@ -1,22 +1,21 @@
-package com.belonk.rabbitmqdemo.test;
+package com.belonk.rabbitmqdemo.service.queue;
 
-import com.belonk.rabbitmqdemo.service.hello.Sender;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
- * Created by sun on 2019/3/6.
+ * Created by sun on 2019/3/13.
  *
  * @author sunfuchang03@126.com
  * @version 1.0
  * @since 1.0
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
-public class SenderTest {
+@Component
+@RabbitListener(queues = Sender.TASK_QUEUE_NAME)
+public class Receiver {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
@@ -35,8 +34,7 @@ public class SenderTest {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    @Autowired
-    private Sender sender;
+
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -56,11 +54,15 @@ public class SenderTest {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    @Test
-    public void testSend() {
-        sender.send("张三");
-        sender.send("zhangsan");
-        // sender.send("lisi");
+    @RabbitHandler
+    public void receive(String msg) throws InterruptedException {
+        System.out.println("Received \"" + msg + "\"." + new Date());
+        for (char ch : msg.toCharArray()) {
+            // 模拟工作时间消耗
+            if (ch == '.') {
+                Thread.sleep(1000);
+            }
+        }
     }
 
     /*

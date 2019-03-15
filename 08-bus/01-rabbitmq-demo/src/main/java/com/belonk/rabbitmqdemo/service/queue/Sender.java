@@ -1,22 +1,21 @@
-package com.belonk.rabbitmqdemo.test;
+package com.belonk.rabbitmqdemo.service.queue;
 
-import com.belonk.rabbitmqdemo.service.hello.Sender;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
- * Created by sun on 2019/3/6.
+ * Created by sun on 2019/3/15.
  *
  * @author sunfuchang03@126.com
  * @version 1.0
  * @since 1.0
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
-public class SenderTest {
+@Component
+@RabbitListener(queues = Sender.TASK_QUEUE_NAME)
+public class Sender {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
@@ -25,7 +24,7 @@ public class SenderTest {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-
+    public static final String TASK_QUEUE_NAME = "default.queue";
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,8 +34,8 @@ public class SenderTest {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    @Autowired
-    private Sender sender;
+    @Resource
+    private AmqpTemplate amqpTemplate;
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -56,11 +55,18 @@ public class SenderTest {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    @Test
-    public void testSend() {
-        sender.send("张三");
-        sender.send("zhangsan");
-        // sender.send("lisi");
+    public void sendMsg() {
+        String[] msgs = new String[]{
+                "First Message.", // 1s
+                "Second Message..", // 2s
+                "Third Message...", // 3s
+                "Fourth Message....", // 4s
+                "Fifth Message....." // 5s
+        };
+        for (String msg : msgs) {
+            amqpTemplate.convertAndSend(msg);
+            System.out.println("[x] Sent '" + msg + "'");
+        }
     }
 
     /*
