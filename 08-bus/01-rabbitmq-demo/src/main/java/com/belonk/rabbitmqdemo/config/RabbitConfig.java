@@ -1,6 +1,8 @@
 package com.belonk.rabbitmqdemo.config;
 
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -54,6 +56,11 @@ public class RabbitConfig {
     @Bean
     public Queue helloQueue() {
         return new Queue(QUEUE_NAME);
+    }
+
+    @Bean
+    public AmqpTemplate rabbitTemplate() {
+        return new RabbitTemplate();
     }
 
     /*

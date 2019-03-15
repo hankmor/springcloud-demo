@@ -1,4 +1,4 @@
-package com.belonk.rabbitmqdemo.service;
+package com.belonk.rabbitmqdemo.service.hello;
 
 import com.belonk.rabbitmqdemo.config.RabbitConfig;
 import org.slf4j.Logger;
@@ -56,7 +56,7 @@ public class Sender {
      */
 
     public void send(String name) {
-        String word = "hello, " + name;
+        String word = "你好, " + name;
         System.out.println("Sender : " + word);
         amqpTemplate.convertAndSend(RabbitConfig.QUEUE_NAME, word);
     }

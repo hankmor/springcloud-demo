@@ -1,4 +1,4 @@
-package com.belonk.rabbitmqdemo.service;
+package com.belonk.rabbitmqdemo.service.hello;
 
 import com.belonk.rabbitmqdemo.config.RabbitConfig;
 import org.slf4j.Logger;
