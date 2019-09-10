@@ -17,6 +17,7 @@
         <module>08-bus</module>
         <module>09-stream</module>
         <module>10-sleuth</module>
+        <module>11_tcc</module>
     </modules>
     <packaging>pom</packaging>
 
