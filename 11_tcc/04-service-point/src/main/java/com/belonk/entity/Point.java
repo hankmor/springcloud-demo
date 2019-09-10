@@ -3,6 +3,7 @@ package com.belonk.entity;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -36,6 +37,7 @@ public class Point {
      */
 
     @Id
+    @GeneratedValue
     private Long id;
     private Long userId;
     private Integer point;
