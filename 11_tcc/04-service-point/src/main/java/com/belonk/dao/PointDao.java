@@ -29,5 +29,5 @@ public interface PointDao extends JpaRepository<Point, Long> {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-
+    Point findByUserId(Long userId);
 }

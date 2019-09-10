@@ -1,7 +1,7 @@
 package com.belonk.test;
 
-import com.belonk.entity.Product;
-import com.belonk.service.ProductService;
+import com.belonk.entity.Point;
+import com.belonk.service.PointService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -27,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ServiceMallTest {
+public class ServicePointTest {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
@@ -51,10 +49,9 @@ public class ServiceMallTest {
     MockMvc mockMvc;
 
     @Resource
-    private ProductService productService;
+    private PointService pointService;
 
-    private static Long iPhoneId = 1L;
-    private static Long iPadId = 2L;
+    private static Long userId = 1L;
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,24 +78,14 @@ public class ServiceMallTest {
                 .build();
     }
 
-    @Test
-    public void testBuySomething() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/product/buy")).andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
     /**
      * 准备测试数据
      */
     @Test
-    public void testCreateProduct() {
-        String name = "iPhone";
-        Double price = 5000d;
-        Product product = productService.create(name, price);
-        System.out.println("iPhone id : " + product.getId());
-
-        name = "iPad";
-        price = 3000d;
-        product = productService.create(name, price);
-        System.out.println("iPad id : " + product.getId());
+    public void testCreate() {
+        Point point = new Point();
+        point.setUserId(userId);
+        point.setPoint(10000);
+        pointService.create(point);
     }
 }
