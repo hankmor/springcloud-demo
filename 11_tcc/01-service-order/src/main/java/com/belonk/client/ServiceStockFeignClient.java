@@ -2,7 +2,6 @@ package com.belonk.client;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
@@ -14,7 +13,7 @@ import java.util.Map;
  * @version 1.0
  * @since 1.0
  */
-@FeignClient("SERVICE-STOCK")
+@FeignClient(name = "SERVICE-STOCK")
 public interface ServiceStockFeignClient {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,6 +33,15 @@ public interface ServiceStockFeignClient {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    @PostMapping("/stock/")
-    public Map<String, Object> reduce(@RequestParam("number") int number);
+    // @PostMapping("/stock/reduce/prepare")
+    // Map<String, Object> prepareReduce(@RequestParam("productId") Long productId, @RequestParam("stockNumber") Integer stockNumber);
+    //
+    // @PostMapping("/stock/reduce/confirm")
+    // Map<String, Object> confirmReduce(@RequestParam("productId") Long productId);
+    //
+    // @PostMapping("/stock/reduce/cancel")
+    // Map<String, Object> cancelReduce(@RequestParam("productId") Long productId);
+
+    @PostMapping("/stock/reduce")
+    Map<String, Object> reduce(@RequestParam("productId") Long productId, @RequestParam("stockNumber") Integer stockNumber);
 }

@@ -60,11 +60,22 @@ public class ProductApi {
      */
 
     @PostMapping("/buy")
-    public void buy(Long productId, Integer buyNumber) {
-        Map<String, Object> resultMap = serviceOrderFeignClient.create(productId, buyNumber);
+    public Map buy(Long userId, Long productId, Integer buyNumber) {
+        Map<String, Object> resultMap = serviceOrderFeignClient.create(userId, productId, buyNumber);
         System.err.println("Bought some thing : ");
         System.err.println("    rtnCode : " + resultMap.get("rtnCode"));
         System.err.println("    rtnMsg  : " + resultMap.get("rtnMsg"));
         System.err.println("    rtnData : " + resultMap.get("rtnData"));
+        return resultMap;
+    }
+
+    @PostMapping("/pay")
+    public Map<String, Object> paySuccess(String orderNo) {
+        Map<String, Object> resultMap = serviceOrderFeignClient.paySuccess(orderNo);
+        System.err.println("Bought some thing : ");
+        System.err.println("    rtnCode : " + resultMap.get("rtnCode"));
+        System.err.println("    rtnMsg  : " + resultMap.get("rtnMsg"));
+        System.err.println("    rtnData : " + resultMap.get("rtnData"));
+        return resultMap;
     }
 }

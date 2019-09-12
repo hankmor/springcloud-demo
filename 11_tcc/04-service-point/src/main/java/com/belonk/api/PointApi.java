@@ -1,10 +1,10 @@
 package com.belonk.api;
 
+import com.belonk.entity.Point;
 import com.belonk.service.PointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,12 +61,33 @@ public class PointApi {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    @PostMapping("/add")
-    public Map<String, Object> add(Long userId, int points) {
-
+    @PostMapping("/add/prepare")
+    public Map<String, Object> prepareAdd(Long userId, int points) {
+        Point point = pointService.prepareAdd(userId, points);
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("rtnCode", 0);
         resultMap.put("rtnMsg", "success");
+        resultMap.put("rtnData", point);
+        return resultMap;
+    }
+
+    @PostMapping("/add/confirm")
+    public Map<String, Object> confirmAdd(Long userId) {
+        Point point = pointService.confirmAdd(userId);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("rtnCode", 0);
+        resultMap.put("rtnMsg", "success");
+        resultMap.put("rtnData", point);
+        return resultMap;
+    }
+
+    @PostMapping("/add/cancel")
+    public Map<String, Object> cancelAdd(Long userId) {
+        Point point = pointService.cancelAdd(userId);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("rtnCode", 0);
+        resultMap.put("rtnMsg", "success");
+        resultMap.put("rtnData", point);
         return resultMap;
     }
 }

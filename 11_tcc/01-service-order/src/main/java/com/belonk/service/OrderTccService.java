@@ -9,7 +9,7 @@ import com.belonk.entity.Order;
  * @version 1.0
  * @since 1.0
  */
-public interface OrderService {
+public interface OrderTccService {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
@@ -28,7 +28,5 @@ public interface OrderService {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    Order create(Long userId, Long productId, Integer buyNumber);
-
-    Order findByOrderNo(String orderNo);
+    Order paySuccess(String orderNo);
 }

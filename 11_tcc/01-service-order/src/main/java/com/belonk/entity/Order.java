@@ -42,6 +42,7 @@ public class Order {
     private String orderNo;
     private Integer status;
     private Long productId;
+    private Long userId;
     private Integer buyNumber;
 
     /*

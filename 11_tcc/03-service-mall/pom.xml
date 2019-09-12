@@ -11,12 +11,4 @@
 
     <artifactId>03-service-mall</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-
-    <dependencies>
-        <!--<dependency>-->
-            <!--<groupId>org.bytesoft</groupId>-->
-            <!--<artifactId>bytetcc-supports-springcloud</artifactId>-->
-            <!--<version>0.5.7</version>-->
-        <!--</dependency>-->
-    </dependencies>
 </project>
