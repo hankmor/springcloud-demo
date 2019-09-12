@@ -117,7 +117,7 @@ public class OrderServiceImpl implements OrderService, OrderTccService {
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public Order paySuccess(String orderNo) {
         Order order = this.findByOrderNo(orderNo);
         // try阶段改为修改状态

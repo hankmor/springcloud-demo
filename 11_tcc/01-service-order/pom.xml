@@ -17,11 +17,12 @@
             <groupId>org.bytesoft</groupId>
             <artifactId>bytetcc-supports-springcloud</artifactId>
             <version>0.4.19</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-dbcp2</artifactId>
-            <version>2.1.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
