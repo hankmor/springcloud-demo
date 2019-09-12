@@ -1,25 +1,27 @@
-package com.belonk.service;
+package com.belonk.service.impl;
 
-import com.belonk.dao.PointDao;
-import com.belonk.entity.Point;
+import com.belonk.client.ServicePointFeignClient;
+import com.belonk.client.ServiceStockFeignClient;
+import com.belonk.dao.OrderDao;
+import com.belonk.entity.Order;
+import com.belonk.service.OrderTccService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.Random;
 
 /**
- * Created by sun on 2019/9/10.
+ * Created by sun on 2019/9/9.
  *
  * @author sunfuchang03@126.com
  * @version 1.0
  * @since 1.0
  */
 @Service
-public class PointService {
+public class OrderCancelService implements OrderTccService {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
@@ -28,7 +30,7 @@ public class PointService {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    private static Logger log = LoggerFactory.getLogger(PointService.class);
+    private static Logger log = LoggerFactory.getLogger(OrderCancelService.class);
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -39,8 +41,11 @@ public class PointService {
      */
 
     @Resource
-    private PointDao pointDao;
-
+    private ServicePointFeignClient servicePointFeignClient;
+    @Resource
+    private ServiceStockFeignClient serviceStockFeignClient;
+    @Resource
+    private OrderDao orderDao;
     private Random random = new Random();
 
     /*
@@ -61,40 +66,19 @@ public class PointService {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    @Transactional
-    public Point create(Point point) {
-        Assert.notNull(point);
-        Assert.notNull(point.getUserId());
-        Assert.notNull(point.getPoint());
-        return pointDao.save(point);
-    }
-
-    @Transactional
-    public Point prepareAdd(Long userId, int points) {
-        Point point = this.findByUser(userId);
-        point.setPreparePoint(points);
-        if (random.nextInt(10) / 2 == 0) {
-            throw new RuntimeException("prepareAdd failed.");
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Order paySuccess(String orderNo) {
+        Order order = orderDao.findByOrderNo(orderNo);
+        // 还原状态
+        order.setStatus(Order.Status.CREATED);
+        int r = random.nextInt(10);
+        if (r / 3 == 0) {
+            throw new RuntimeException("Business process failed.");
         }
-        return pointDao.save(point);
-    }
-
-    @Transactional
-    public Point confirmAdd(Long userId) {
-        Point point = this.findByUser(userId);
-        point.setPoint(point.getPoint() + point.getPreparePoint());
-        point.setPreparePoint(0);
-        return pointDao.save(point);
-    }
-
-    @Transactional
-    public Point cancelAdd(Long userId) {
-        Point point = this.findByUser(userId);
-        point.setPreparePoint(0);
-        return pointDao.save(point);
-    }
-
-    public Point findByUser(Long userId) {
-        return pointDao.findByUserId(userId);
+        orderDao.save(order);
+        // serviceStockFeignClient.reduce(order.getProductId(), order.getBuyNumber());
+        // servicePointFeignClient.prepareAdd(order.getUserId(), order.getBuyNumber() * 100);
+        return order;
     }
 }

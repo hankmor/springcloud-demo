@@ -33,6 +33,12 @@ public interface ServicePointFeignClient {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    @PostMapping("/point/")
-    Map<String, Object> add(@RequestParam("points") int points);
+    @PostMapping("/point/add/prepare")
+    public Map<String, Object> prepareAdd(@RequestParam("userId") Long userId, @RequestParam("points") Integer points);
+
+    @PostMapping("/point/add/confirm")
+    public Map<String, Object> confirmAdd(@RequestParam("userId") Long userId);
+
+    @PostMapping("/point/add/cancel")
+    public Map<String, Object> cancelAdd(@RequestParam("userId") Long userId);
 }

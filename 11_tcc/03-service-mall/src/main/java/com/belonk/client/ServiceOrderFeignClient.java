@@ -34,5 +34,8 @@ public interface ServiceOrderFeignClient {
      */
 
     @PostMapping("/order/create")
-    Map<String, Object> create(@RequestParam("productId") Long productId, @RequestParam("buyNumber") Integer buyNumber);
+    Map<String, Object> create(@RequestParam("userId") Long userId, @RequestParam("productId") Long productId, @RequestParam("buyNumber") Integer buyNumber);
+
+    @PostMapping("/order/paySuccess")
+    Map<String, Object> paySuccess(@RequestParam("orderNo") String orderNo);
 }

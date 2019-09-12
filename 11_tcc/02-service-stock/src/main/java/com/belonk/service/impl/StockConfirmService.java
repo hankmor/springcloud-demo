@@ -1,12 +1,12 @@
-package com.belonk.service;
+package com.belonk.service.impl;
 
-import com.belonk.dao.PointDao;
-import com.belonk.entity.Point;
+import com.belonk.dao.StockDao;
+import com.belonk.entity.Stock;
+import com.belonk.service.StockService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.Random;
@@ -19,7 +19,7 @@ import java.util.Random;
  * @since 1.0
  */
 @Service
-public class PointService {
+public class StockConfirmService implements StockService {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
@@ -28,7 +28,7 @@ public class PointService {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    private static Logger log = LoggerFactory.getLogger(PointService.class);
+    private static Logger log = LoggerFactory.getLogger(StockConfirmService.class);
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -39,8 +39,7 @@ public class PointService {
      */
 
     @Resource
-    private PointDao pointDao;
-
+    private StockDao stockDao;
     private Random random = new Random();
 
     /*
@@ -62,39 +61,11 @@ public class PointService {
      */
 
     @Transactional
-    public Point create(Point point) {
-        Assert.notNull(point);
-        Assert.notNull(point.getUserId());
-        Assert.notNull(point.getPoint());
-        return pointDao.save(point);
-    }
-
-    @Transactional
-    public Point prepareAdd(Long userId, int points) {
-        Point point = this.findByUser(userId);
-        point.setPreparePoint(points);
-        if (random.nextInt(10) / 2 == 0) {
-            throw new RuntimeException("prepareAdd failed.");
-        }
-        return pointDao.save(point);
-    }
-
-    @Transactional
-    public Point confirmAdd(Long userId) {
-        Point point = this.findByUser(userId);
-        point.setPoint(point.getPoint() + point.getPreparePoint());
-        point.setPreparePoint(0);
-        return pointDao.save(point);
-    }
-
-    @Transactional
-    public Point cancelAdd(Long userId) {
-        Point point = this.findByUser(userId);
-        point.setPreparePoint(0);
-        return pointDao.save(point);
-    }
-
-    public Point findByUser(Long userId) {
-        return pointDao.findByUserId(userId);
+    @Override
+    public Stock reduce(Long productId, Integer stockNumber) {
+        Stock stock = stockDao.findByProductId(productId);
+        // TODO 加锁
+        stock.setFrozenStock(0);
+        return stockDao.save(stock);
     }
 }

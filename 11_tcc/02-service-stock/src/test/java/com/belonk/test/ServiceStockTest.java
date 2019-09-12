@@ -1,7 +1,8 @@
 package com.belonk.test;
 
 import com.belonk.entity.Stock;
-import com.belonk.service.StockService;
+import com.belonk.service.impl.CrudStockService;
+import com.belonk.service.impl.StockConfirmService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +50,7 @@ public class ServiceStockTest {
     MockMvc mockMvc;
 
     @Resource
-    private StockService stockService;
+    private CrudStockService stockService;
 
     private static Long iPhoneId = 1L;
     private static Long iPadId = 2L;
