@@ -1,16 +1,19 @@
 package com.belonk.api;
 
+import com.belonk.dao.PointDao;
 import com.belonk.entity.Point;
+import com.belonk.service.CrudPointService;
 import com.belonk.service.PointService;
+import org.bytesoft.compensable.Compensable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by sun on 2019/9/9.
@@ -21,7 +24,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/point")
-public class PointApi {
+@Compensable(interfaceClass = PointService.class, confirmableKey = "pointConfirmService", cancellableKey = "pointCancelService")
+public class PointApi implements PointService {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
@@ -41,7 +45,11 @@ public class PointApi {
      */
 
     @Resource
-    private PointService pointService;
+    private CrudPointService crudPointService;
+    @Resource
+    private PointDao pointDao;
+
+    private Random random = new Random();
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -61,33 +69,15 @@ public class PointApi {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    @PostMapping("/add/prepare")
-    public Map<String, Object> prepareAdd(Long userId, int points) {
-        Point point = pointService.prepareAdd(userId, points);
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("rtnCode", 0);
-        resultMap.put("rtnMsg", "success");
-        resultMap.put("rtnData", point);
-        return resultMap;
-    }
-
-    @PostMapping("/add/confirm")
-    public Map<String, Object> confirmAdd(Long userId) {
-        Point point = pointService.confirmAdd(userId);
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("rtnCode", 0);
-        resultMap.put("rtnMsg", "success");
-        resultMap.put("rtnData", point);
-        return resultMap;
-    }
-
-    @PostMapping("/add/cancel")
-    public Map<String, Object> cancelAdd(Long userId) {
-        Point point = pointService.cancelAdd(userId);
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("rtnCode", 0);
-        resultMap.put("rtnMsg", "success");
-        resultMap.put("rtnData", point);
-        return resultMap;
+    @PostMapping("/add")
+    @Transactional
+    @Override
+    public Point add(Long userId, int points) {
+        Point point = pointDao.findByUserId(userId);
+        point.setPreparePoint(points);
+        if (random.nextInt(10) / 2 == 0) {
+            throw new RuntimeException("Business try failed.");
+        }
+        return pointDao.save(point);
     }
 }

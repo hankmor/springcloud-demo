@@ -1,20 +1,13 @@
 package com.belonk.service.impl;
 
-import com.belonk.client.ServicePointFeignClient;
-import com.belonk.client.ServiceStockFeignClient;
 import com.belonk.dao.OrderDao;
 import com.belonk.entity.Order;
 import com.belonk.service.OrderService;
-import com.belonk.service.OrderTccService;
-import org.bytesoft.compensable.Compensable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Random;
 
 /**
  * Created by sun on 2019/9/11.
@@ -24,8 +17,7 @@ import java.util.Random;
  * @since 1.0
  */
 @Service
-@Compensable(interfaceClass = OrderTccService.class, confirmableKey = "orderConfirmService", cancellableKey = "orderCancelService")
-public class OrderServiceImpl implements OrderService, OrderTccService {
+public class OrderServiceImpl implements OrderService {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
@@ -46,13 +38,6 @@ public class OrderServiceImpl implements OrderService, OrderTccService {
 
     @Resource
     private OrderDao orderDao;
-
-    private Random random = new Random();
-
-    @Autowired
-    private ServicePointFeignClient servicePointFeignClient;
-    @Autowired
-    private ServiceStockFeignClient serviceStockFeignClient;
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -114,21 +99,4 @@ public class OrderServiceImpl implements OrderService, OrderTccService {
     //     // 添加积分
     //    省略添加积分代码
     // }
-
-
-    @Override
-    @Transactional
-    public Order paySuccess(String orderNo) {
-        Order order = this.findByOrderNo(orderNo);
-        // try阶段改为修改状态
-        order.setStatus(Order.Status.UPDATING);
-        orderDao.save(order);
-        // int r = random.nextInt(10);
-        // if (r / 2 == 0) {
-        //     throw new RuntimeException("modify order status failed.");
-        // }
-        serviceStockFeignClient.reduce(order.getProductId(), order.getBuyNumber());
-        // servicePointFeignClient.prepareAdd(order.getUserId(), order.getBuyNumber() * 100);
-        return order;
-    }
 }

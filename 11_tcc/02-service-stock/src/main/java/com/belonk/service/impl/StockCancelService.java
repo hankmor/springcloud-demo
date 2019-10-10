@@ -63,7 +63,12 @@ public class StockCancelService implements StockService {
     @Transactional
     @Override
     public Stock reduce(Long productId, Integer stockNumber) {
+        System.err.println("========> 执行了StockCancelService的reduce");
         Stock stock = stockDao.findByProductId(productId);
+        int r = random.nextInt(10);
+        if (r / 3 == 0) {
+            throw new RuntimeException("Business cancel failed.");
+        }
         // TODO 加锁
         stock.setStock(stock.getStock() + stock.getFrozenStock());
         stock.setFrozenStock(0);

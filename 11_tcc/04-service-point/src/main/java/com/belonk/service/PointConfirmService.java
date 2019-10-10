@@ -1,8 +1,7 @@
-package com.belonk.service.impl;
+package com.belonk.service;
 
-import com.belonk.dao.StockDao;
-import com.belonk.entity.Stock;
-import com.belonk.service.StockService;
+import com.belonk.dao.PointDao;
+import com.belonk.entity.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,14 +11,14 @@ import javax.annotation.Resource;
 import java.util.Random;
 
 /**
- * Created by sun on 2019/9/10.
+ * Created by sun on 2019/10/10.
  *
  * @author sunfuchang03@126.com
  * @version 1.0
  * @since 1.0
  */
 @Service
-public class StockConfirmService implements StockService {
+public class PointConfirmService implements PointService {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
@@ -28,7 +27,7 @@ public class StockConfirmService implements StockService {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    private static Logger log = LoggerFactory.getLogger(StockConfirmService.class);
+    private static Logger log = LoggerFactory.getLogger(PointConfirmService.class);
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -39,7 +38,8 @@ public class StockConfirmService implements StockService {
      */
 
     @Resource
-    private StockDao stockDao;
+    PointDao pointDao;
+
     private Random random = new Random();
 
     /*
@@ -62,15 +62,14 @@ public class StockConfirmService implements StockService {
 
     @Transactional
     @Override
-    public Stock reduce(Long productId, Integer stockNumber) {
-        System.err.println("========> 执行了StockConfirmService的reduce");
-        Stock stock = stockDao.findByProductId(productId);
-        int r = random.nextInt(10);
-        if (r / 3 == 0) {
+    public Point add(Long userId, int points) {
+        System.err.println("========> 执行了PointConfirmService的add");
+        Point point = pointDao.findByUserId(userId);
+        if (random.nextInt(10) / 2 == 0) {
             throw new RuntimeException("Business confirm failed.");
         }
-        // TODO 加锁
-        stock.setFrozenStock(0);
-        return stockDao.save(stock);
+        point.setPoint(point.getPoint() + point.getPreparePoint());
+        point.setPreparePoint(0);
+        return pointDao.save(point);
     }
 }

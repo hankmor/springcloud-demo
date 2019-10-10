@@ -1,52 +1,19 @@
 package com.belonk.service;
 
-import com.belonk.dao.PointDao;
 import com.belonk.entity.Point;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
-import javax.annotation.Resource;
-import java.util.Random;
 
 /**
- * Created by sun on 2019/9/10.
+ * Created by sun on 2019/10/10.
  *
  * @author sunfuchang03@126.com
  * @version 1.0
  * @since 1.0
  */
-@Service
-public class PointService {
+public interface PointService {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
-     * Static fields/constants/initializer
-     *
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
-
-    private static Logger log = LoggerFactory.getLogger(PointService.class);
-
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     *
-     * Instance fields
-     *
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     */
-
-    @Resource
-    private PointDao pointDao;
-
-    private Random random = new Random();
-
-    /*
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     *
-     * Constructors
+     * Constants/Initializer
      *
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
@@ -56,45 +23,10 @@ public class PointService {
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      *
-     * Methods
+     * Interfaces
      *
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    @Transactional
-    public Point create(Point point) {
-        Assert.notNull(point);
-        Assert.notNull(point.getUserId());
-        Assert.notNull(point.getPoint());
-        return pointDao.save(point);
-    }
-
-    @Transactional
-    public Point prepareAdd(Long userId, int points) {
-        Point point = this.findByUser(userId);
-        point.setPreparePoint(points);
-        if (random.nextInt(10) / 2 == 0) {
-            throw new RuntimeException("prepareAdd failed.");
-        }
-        return pointDao.save(point);
-    }
-
-    @Transactional
-    public Point confirmAdd(Long userId) {
-        Point point = this.findByUser(userId);
-        point.setPoint(point.getPoint() + point.getPreparePoint());
-        point.setPreparePoint(0);
-        return pointDao.save(point);
-    }
-
-    @Transactional
-    public Point cancelAdd(Long userId) {
-        Point point = this.findByUser(userId);
-        point.setPreparePoint(0);
-        return pointDao.save(point);
-    }
-
-    public Point findByUser(Long userId) {
-        return pointDao.findByUserId(userId);
-    }
+    Point add(Long userId, int points);
 }
