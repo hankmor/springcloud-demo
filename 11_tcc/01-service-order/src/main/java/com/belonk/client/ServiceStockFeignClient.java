@@ -33,15 +33,6 @@ public interface ServiceStockFeignClient {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    // @PostMapping("/stock/reduce/prepare")
-    // Map<String, Object> prepareReduce(@RequestParam("productId") Long productId, @RequestParam("stockNumber") Integer stockNumber);
-    //
-    // @PostMapping("/stock/reduce/confirm")
-    // Map<String, Object> confirmReduce(@RequestParam("productId") Long productId);
-    //
-    // @PostMapping("/stock/reduce/cancel")
-    // Map<String, Object> cancelReduce(@RequestParam("productId") Long productId);
-
     @PostMapping("/stock/reduce")
     Map<String, Object> reduce(@RequestParam("productId") Long productId, @RequestParam("stockNumber") Integer stockNumber);
 }

@@ -39,7 +39,6 @@ public class CrudStockService {
 
     @Resource
     private StockDao stockDao;
-    private Random random = new Random();
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -61,21 +60,6 @@ public class CrudStockService {
 
     @Transactional
     public Stock create(Stock stock) {
-        return stockDao.save(stock);
-    }
-
-    @Transactional
-    public Stock prepareReduce(Long productId, Integer stockNumber) {
-        Stock stock = stockDao.findByProductId(productId);
-        if (stock.getStock() < stockNumber) {
-            throw new RuntimeException("库存不足了: " + stock.getStock() + " < " + stockNumber);
-        }
-        if (random.nextInt(10) / 3 == 0) {
-            throw new RuntimeException("prepareReduce failed.");
-        }
-        // TODO 加锁
-        stock.setStock(stock.getStock() - stockNumber);
-        stock.setFrozenStock(stockNumber);
         return stockDao.save(stock);
     }
 }

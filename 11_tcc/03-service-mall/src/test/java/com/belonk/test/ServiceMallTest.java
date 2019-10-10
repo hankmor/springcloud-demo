@@ -137,6 +137,8 @@ public class ServiceMallTest {
         ).andExpect(status().isOk());
     }
 
+    // todo 运行此方法测试分布式事务
+
     @Test
     public void testPay() throws Exception {
         String orderNo = "1568277244427";

@@ -1,7 +1,7 @@
 package com.belonk.test;
 
 import com.belonk.entity.Point;
-import com.belonk.service.PointService;
+import com.belonk.service.CrudPointService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +49,7 @@ public class ServicePointTest {
     MockMvc mockMvc;
 
     @Resource
-    private PointService pointService;
+    private CrudPointService pointService;
 
     private static Long userId = 1L;
 

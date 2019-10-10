@@ -1,5 +1,6 @@
 package com.belonk.api;
 
+import com.belonk.dao.StockDao;
 import com.belonk.entity.Stock;
 import com.belonk.service.StockService;
 import com.belonk.service.impl.CrudStockService;
@@ -7,11 +8,13 @@ import org.bytesoft.compensable.Compensable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Random;
 
 /**
  * Created by sun on 2019/9/9.
@@ -44,6 +47,10 @@ public class StockApi implements StockService {
 
     @Resource
     private CrudStockService stockService;
+    @Resource
+    private StockDao stockDao;
+
+    private static Random random = new Random();
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -63,41 +70,23 @@ public class StockApi implements StockService {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    // @PostMapping("/reduce/prepare")
-    // public Map<String, Object> prepareReduce(Long productId, Integer stockNumber) {
-    //     Stock stock = stockService.prepareReduce(productId, stockNumber);
-    //     Map<String, Object> resultMap = new HashMap<>();
-    //     resultMap.put("rtnCode", 0);
-    //     resultMap.put("rtnMsg", "success");
-    //     resultMap.put("rtnData", stock);
-    //     return resultMap;
-    // }
-    //
-    // @PostMapping("/reduce/confirm")
-    // public Map<String, Object> confirmReduce(Long productId) {
-    //     Stock stock = stockService.confirmReduce(productId);
-    //     Map<String, Object> resultMap = new HashMap<>();
-    //     resultMap.put("rtnCode", 0);
-    //     resultMap.put("rtnMsg", "success");
-    //     resultMap.put("rtnData", stock);
-    //     return resultMap;
-    // }
-    //
-    // @PostMapping("/reduce/cancel")
-    // public Map<String, Object> cancelReduce(Long productId) {
-    //     Stock stock = stockService.cancelReduce(productId);
-    //     Map<String, Object> resultMap = new HashMap<>();
-    //     resultMap.put("rtnCode", 0);
-    //     resultMap.put("rtnMsg", "success");
-    //     resultMap.put("rtnData", stock);
-    //     return resultMap;
-    // }
-
     @PostMapping("/reduce")
-    @Transactional
     @Override
+    @Transactional
     public Stock reduce(Long productId, Integer stockNumber) {
-        Stock stock = stockService.prepareReduce(productId, stockNumber);
-        return stock;
+        Assert.notNull(productId);
+        Assert.notNull(stockNumber);
+        Stock stock = stockDao.findByProductId(productId);
+        if (stock.getStock() < stockNumber) {
+            throw new RuntimeException("库存不足了: " + stock.getStock() + " < " + stockNumber);
+        }
+        // 模拟抛出异常
+        if (random.nextInt(10) / 3 == 0) {
+            throw new RuntimeException("Business try failed.");
+        }
+        // TODO 加锁
+        stock.setStock(stock.getStock() - stockNumber);
+        stock.setFrozenStock(stockNumber);
+        return stockDao.save(stock);
     }
 }

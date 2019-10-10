@@ -1,12 +1,9 @@
 package com.belonk.config;
 
 import org.bytesoft.bytejta.supports.jdbc.LocalXADataSource;
-import org.bytesoft.bytetcc.supports.springcloud.config.SpringCloudConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import javax.sql.DataSource;
 
@@ -17,7 +14,6 @@ import javax.sql.DataSource;
  * @version 1.0
  * @since 1.0
  */
-@Import(SpringCloudConfiguration.class)
 @Configuration
 public class ServiceConfig {
     /*
@@ -59,17 +55,9 @@ public class ServiceConfig {
      */
 
     @Bean(name = "dataSource")
-    @ConditionalOnProperty(name = "spring.datasource")
     public DataSource getDataSource(DataSourceProperties properties) {
         LocalXADataSource dataSource = new LocalXADataSource();
         dataSource.setDataSource(properties.initializeDataSourceBuilder().build());
         return dataSource;
     }
-
-    // @Bean
-    // public JdbcTemplate getJdbcTemplate() {
-    //     JdbcTemplate jdbcTemplate = new JdbcTemplate();
-    //     jdbcTemplate.setDataSource(this.getDataSource());
-    //     return jdbcTemplate;
-    // }
 }

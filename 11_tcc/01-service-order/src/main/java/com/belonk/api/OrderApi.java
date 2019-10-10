@@ -1,5 +1,6 @@
 package com.belonk.api;
 
+import com.belonk.client.ServicePointFeignClient;
 import com.belonk.client.ServiceStockFeignClient;
 import com.belonk.dao.OrderDao;
 import com.belonk.entity.Order;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by sun on 2019/9/9.
@@ -48,11 +50,15 @@ public class OrderApi implements OrderTccService {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    // @Resource
-    // private OrderServiceImpl orderService;
+    @Resource
+    private OrderServiceImpl orderService;
     @Resource
     private OrderDao orderDao;
-    @Resource
+
+    private static Random random = new Random();
+    @Autowired
+    private ServicePointFeignClient servicePointFeignClient;
+    @Autowired
     private ServiceStockFeignClient serviceStockFeignClient;
 
     /*
@@ -73,18 +79,18 @@ public class OrderApi implements OrderTccService {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
 
-    // @PostMapping("/create")
-    // public Map<String, Object> create(Long userId, Long productId, Integer buyNumber) {
-    //     Assert.notNull(userId);
-    //     Assert.notNull(productId);
-    //     Assert.notNull(buyNumber);
-    //     Order order = orderService.create(userId, productId, buyNumber);
-    //     Map<String, Object> resultMap = new HashMap<>();
-    //     resultMap.put("rtnCode", 0);
-    //     resultMap.put("rtnMsg", "success");
-    //     resultMap.put("rtnData", order);
-    //     return resultMap;
-    // }
+    @PostMapping("/create")
+    public Map<String, Object> create(Long userId, Long productId, Integer buyNumber) {
+        Assert.notNull(userId);
+        Assert.notNull(productId);
+        Assert.notNull(buyNumber);
+        Order order = orderService.create(userId, productId, buyNumber);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("rtnCode", 0);
+        resultMap.put("rtnMsg", "success");
+        resultMap.put("rtnData", order);
+        return resultMap;
+    }
 
     // @PostMapping("/paySuccess")
     // public Map<String, Object> paySuccess(String orderNo) {
@@ -102,17 +108,16 @@ public class OrderApi implements OrderTccService {
     @Transactional
     public Order paySuccess(String orderNo) {
         Assert.hasLength(orderNo);
-        // Order order = orderService.paySuccess(orderNo);
         Order order = orderDao.findByOrderNo(orderNo);
         // try阶段改为修改状态
         order.setStatus(Order.Status.UPDATING);
         orderDao.save(order);
-        // int r = random.nextInt(10);
-        // if (r / 2 == 0) {
-        //     throw new RuntimeException("modify order status failed.");
-        // }
+        int r = random.nextInt(10);
+        if (r / 2 == 0) {
+            throw new RuntimeException("Business try failed.");
+        }
         serviceStockFeignClient.reduce(order.getProductId(), order.getBuyNumber());
-        // servicePointFeignClient.prepareAdd(order.getUserId(), order.getBuyNumber() * 100);
+        servicePointFeignClient.prepareAdd(order.getUserId(), order.getBuyNumber() * 100);
         return order;
     }
 }

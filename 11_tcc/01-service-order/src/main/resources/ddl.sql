@@ -7,3 +7,5 @@ CREATE TABLE `service-order`.`t_order`  (
   `buyNumber` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
+
+INSERT INTO `service-order`.`t_order`(`id`, `orderNo`, `status`, `productId`, `userId`, `buyNumber`) VALUES (1, '1568277244427', 0, 2, 1, 10);
