@@ -1,10 +1,9 @@
 package com.belonk.client;
 
+import com.belonk.domain.Stock;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Map;
 
 /**
  * Created by sun on 2019/9/9.
@@ -34,5 +33,5 @@ public interface ServiceStockFeignClient {
      */
 
     @PostMapping("/stock/reduce")
-    Map<String, Object> reduce(@RequestParam("productId") Long productId, @RequestParam("stockNumber") Integer stockNumber);
+    Stock reduce(@RequestParam("productId") Long productId, @RequestParam("stockNumber") Integer stockNumber);
 }

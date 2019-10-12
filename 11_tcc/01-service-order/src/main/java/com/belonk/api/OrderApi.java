@@ -3,6 +3,8 @@ package com.belonk.api;
 import com.belonk.client.ServicePointFeignClient;
 import com.belonk.client.ServiceStockFeignClient;
 import com.belonk.dao.OrderDao;
+import com.belonk.domain.Point;
+import com.belonk.domain.Stock;
 import com.belonk.entity.Order;
 import com.belonk.service.OrderTccService;
 import com.belonk.service.impl.OrderServiceImpl;
@@ -116,8 +118,10 @@ public class OrderApi implements OrderTccService {
         if (r / 2 == 0) {
             throw new RuntimeException("Business try failed.");
         }
-        serviceStockFeignClient.reduce(order.getProductId(), order.getBuyNumber());
-        servicePointFeignClient.prepareAdd(order.getUserId(), order.getBuyNumber() * 100);
+        Stock stock = serviceStockFeignClient.reduce(order.getProductId(), order.getBuyNumber());
+        System.err.println("stock invoking result : " + stock);
+        Point point = servicePointFeignClient.prepareAdd(order.getUserId(), order.getBuyNumber() * 100);
+        System.err.println("point invoking result : " + point);
         return order;
     }
 }
