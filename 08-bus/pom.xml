@@ -13,7 +13,6 @@
     <description>Demo project for Spring cloud bus</description>
     <packaging>pom</packaging>
     <modules>
-        <module>01-rabbitmq-demo</module>
         <module>02-config-server-eureka</module>
         <module>02-config-client-eureka</module>
     </modules>

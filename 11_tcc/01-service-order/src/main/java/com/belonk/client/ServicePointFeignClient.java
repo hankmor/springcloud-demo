@@ -1,10 +1,9 @@
 package com.belonk.client;
 
+import com.belonk.domain.Point;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Map;
 
 /**
  * Created by sun on 2019/9/9.
@@ -34,5 +33,5 @@ public interface ServicePointFeignClient {
      */
 
     @PostMapping("/point/add")
-    Map<String, Object> prepareAdd(@RequestParam("userId") Long userId, @RequestParam("points") Integer points);
+    Point prepareAdd(@RequestParam("userId") Long userId, @RequestParam("points") Integer points);
 }
