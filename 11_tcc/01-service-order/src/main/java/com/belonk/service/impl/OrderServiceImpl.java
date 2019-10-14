@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
+import java.util.Random;
 
 /**
  * Created by sun on 2019/9/11.
@@ -38,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private OrderDao orderDao;
+    private static Random random = new Random();
 
     /*
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,6 +61,7 @@ public class OrderServiceImpl implements OrderService {
      */
 
     @Override
+    @Transactional
     public Order create(Long userId, Long productId, Integer buyNumber) {
         String orderNo = String.valueOf(System.currentTimeMillis());
         Order order = new Order();
@@ -66,7 +70,13 @@ public class OrderServiceImpl implements OrderService {
         order.setUserId(userId);
         order.setBuyNumber(buyNumber);
         order.setStatus(Order.Status.CREATED);
-        return orderDao.save(order);
+        order = orderDao.save(order);
+        int r = random.nextInt(10);
+        // 非compensable事务，抛出异常回滚
+        if (r / 2 == 0) {
+            throw new RuntimeException("Order create failed.");
+        }
+        return order;
     }
 
     @Override
