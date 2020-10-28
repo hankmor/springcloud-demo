@@ -84,7 +84,8 @@ public class DemoController {
     }
 
     @GetMapping("/hello/user")
-    public String sayHello(@RequestBody User user) {
+    public String sayHello(@RequestBody User user) throws InterruptedException {
+        Thread.sleep(4000);
         return "hello, " + user.getName() + ", give you a gift " + user.getGift();
     }
 

@@ -1,5 +1,6 @@
 package com.belonk;
 
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
@@ -58,7 +59,7 @@ public class EurekaServerApplication {
     public static void main(String[] args) {
         SpringApplicationBuilder builder = new SpringApplicationBuilder(EurekaServerApplication.class);
         // web环境
-        builder.web(true);
+        builder.web(WebApplicationType.SERVLET);
         builder.run(args);
     }
     

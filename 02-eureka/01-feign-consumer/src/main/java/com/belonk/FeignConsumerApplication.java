@@ -1,5 +1,6 @@
 package com.belonk;
 
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -55,7 +56,7 @@ public class FeignConsumerApplication {
      */
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(FeignConsumerApplication.class).web(true).run(args);
+        new SpringApplicationBuilder(FeignConsumerApplication.class).web(WebApplicationType.SERVLET).run(args);
     }
     
     /*
