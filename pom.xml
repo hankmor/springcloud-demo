@@ -15,7 +15,7 @@
         <module>config-server-native-encrypt</module>
         <module>config-server-remote</module>
         <module>eureka-server</module>
-        <module>feign-consumer</module>
+        <module>feign-eureka-consumer</module>
         <module>hystrix-dashboard-turbine</module>
         <module>hystrix-demo</module>
         <module>hystrix-feign-consumer</module>
@@ -23,9 +23,10 @@
         <module>hystrix-service-1</module>
         <module>hystrix-service-2</module>
         <module>ribbon-consumer</module>
-        <module>service-provider</module>
+        <module>service-eureka-provider</module>
         <module>sleuth</module>
         <module>stream</module>
+        <module>feign-demo</module>
     </modules>
     <packaging>pom</packaging>
 
