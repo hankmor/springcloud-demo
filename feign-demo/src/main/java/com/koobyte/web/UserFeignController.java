@@ -1,6 +1,8 @@
 package com.koobyte.web;
 
 import com.koobyte.domain.User;
+import com.koobyte.domain.UserQuery;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -8,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Created by sun on 2021/7/22.
@@ -49,7 +53,33 @@ public class UserFeignController {
 		return new ArrayList<>(users.values());
 	}
 
-	// 添加时传递json
+	// 按照条件查询
+	@GetMapping("/query")
+	public List<User> query(UserQuery query) {
+		return this.queryByJson(query);
+	}
+
+	// 按照条件查询，传递json格式参数
+	@GetMapping("/query/json")
+	public List<User> queryByJson(@RequestBody UserQuery query) {
+		String name = query.getName();
+		Integer maxAge = query.getMaxAge();
+		Integer minAge = query.getMinAge();
+		List<User> users = this.queryAllUser();
+		Predicate<User> predicate = user -> true;
+		if (StringUtils.hasLength(name)) {
+			predicate = predicate.and(user -> user.getName().contains(name));
+		}
+		if (minAge != null) {
+			predicate = predicate.and(user -> user.getAge() != null && user.getAge() >= minAge);
+		}
+		if (maxAge != null) {
+			predicate = predicate.and(user -> user.getAge() != null && user.getAge() <= maxAge);
+		}
+		return users.stream().filter(predicate).collect(Collectors.toList());
+	}
+
+	// 故意让添加时按照json请求
 	@PostMapping
 	public Long add(@RequestBody User user) {
 		assert user != null;
@@ -59,7 +89,7 @@ public class UserFeignController {
 		return cid;
 	}
 
-	// 修改时不传递json
+	// 故意让修改时按照表单请求
 	@PutMapping
 	public void update(User user) {
 		assert user != null;
